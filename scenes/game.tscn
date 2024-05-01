@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c2ieqtrjcqh3p"]
+[gd_scene load_steps=9 format=3 uid="uid://c2ieqtrjcqh3p"]
 
 [ext_resource type="PackedScene" uid="uid://cqypap8be0h23" path="res://scenes/player.tscn" id="1_0vame"]
 [ext_resource type="Texture2D" uid="uid://0d4jnjx15blt" path="res://assets/sprites/world_tileset.png" id="1_l8n17"]
+[ext_resource type="PackedScene" uid="uid://qffuotxxbt4b" path="res://scenes/platform.tscn" id="3_h2lxb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8d5d8"]
 texture = ExtResource("1_l8n17")
@@ -407,6 +408,44 @@ texture = ExtResource("1_l8n17")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_8d5d8")
 
+[sub_resource type="Animation" id="Animation_wb3gu"]
+resource_name = "move"
+length = 1.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(450, 69), Vector2(527, 69)]
+}
+
+[sub_resource type="Animation" id="Animation_ysl8h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(450, 69)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_11qwr"]
+_data = {
+"RESET": SubResource("Animation_ysl8h"),
+"move": SubResource("Animation_wb3gu")
+}
+
 [node name="Game" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -421,3 +460,15 @@ position = Vector2(41, 42)
 position = Vector2(0, -7)
 zoom = Vector2(4, 4)
 position_smoothing_enabled = true
+
+[node name="Platform" parent="." instance=ExtResource("3_h2lxb")]
+position = Vector2(40, 11)
+
+[node name="Platform2" parent="." instance=ExtResource("3_h2lxb")]
+position = Vector2(450, 69)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Platform2"]
+libraries = {
+"": SubResource("AnimationLibrary_11qwr")
+}
+autoplay = "move"
